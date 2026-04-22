@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LastBite - Cek Side Dish</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem; text-align: center; }
+        button { background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #d35400; }
+        #result { margin-top: 20px; font-weight: bold; font-size: 1.2rem; min-height: 1.5em; color: #2c3e50; }
+        .info { font-size: 0.8rem; color: #7f8c8d; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🍔 Cek Side Dish</h2>
+    <p>Masukkan 6 digit kode kuponmu:</p>
+    <input type="text" id="couponInput" placeholder="Contoh: a1b2c3" maxlength="6">
+    <br>
+    <button onclick="revealSideDish()">Buka Hadiah!</button>
+    
+    <div id="result"></div>
+    <p class="info">*Satu kode selalu menghasilkan side dish yang sama.</p>
+</div>
+
+<script>
+    function revealSideDish() {
+        const coupon = document.getElementById('couponInput').value.toLowerCase().trim();
+        const resultDiv = document.getElementById('result');
+
+        if (coupon.length !== 6) {
+            resultDiv.innerText = "⚠️ Kode harus 6 digit!";
+            resultDiv.style.color = "red";
+            return;
+        }
+
+        // 1. Hash kode kupon menggunakan SHA256
+        const hash = CryptoJS.SHA256(coupon).toString();
+        
+        // 2. Ambil sebagian kecil dari hash dan ubah ke angka (0-99)
+        const hashInt = parseInt(hash.substring(0, 8), 16);
+        const score = hashInt % 100;
+
+        // 3. Tentukan Side Dish berdasarkan probabilitas
+        let sideDish = "";
+        if (score < 60) {
+            sideDish = "🍟 Kentang Goreng";
+        } else if (score < 90) {
+            sideDish = "🍗 Chicken Nugget";
+        } else {
+            sideDish = "🧅 Onion Rings";
+        }
+
+        // Tampilkan hasil
+        resultDiv.style.color = "#2c3e50";
+        resultDiv.innerText = sideDish;
+    }
+</script>
+
+</body>
+</html>
