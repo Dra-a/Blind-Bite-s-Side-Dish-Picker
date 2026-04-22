@@ -123,7 +123,7 @@
     <h1>🍔 Blind Bite 🍔</h1>
     <span class="brand-handle">@blind.bite</span>
     
-    <p>Masukkan 6 digit kuponmu untuk membuka blind boxnya!</p>
+    <p>Masukkan 6 digit kuponmu\nuntuk membuka blind boxnya!</p>
     <input type="text" id="couponInput" placeholder="xxxxxx" maxlength="6">
     <br>
     <button onclick="revealSideDish()">BUKA KOTAK!</button>
@@ -177,7 +177,7 @@
             resultDiv.style.opacity = 0;
             setTimeout(() => {
                 resultDiv.innerHTML = `
-                    <span style="color: rgba(253, 241, 218, 0.7); font-size: 1rem;">Hore! Kotak terbuka:</span><br>
+                    <span style="color: rgba(253, 241, 218, 0.7); font-size: 1rem;">Yey! Kamu dapat side dish:</span><br>
                     <img src="${sideDishImg}" alt="${sideDishName}" class="side-dish-img">
                     <span class="side-dish-text">${sideDishName}</span>
                 `;
