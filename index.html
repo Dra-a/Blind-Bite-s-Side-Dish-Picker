@@ -9,33 +9,138 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #fdf2e9; margin: 0; }
-        .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 350px; border: 2px solid #e67e22; }
-        h2 { color: #d35400; margin-bottom: 5px; }
-        .brand { font-weight: bold; color: #e67e22; letter-spacing: 1px; margin-bottom: 20px; display: block; }
-        input { width: 90%; padding: 12px; margin: 15px 0; border: 2px solid #fed7aa; border-radius: 8px; font-size: 1.2rem; text-align: center; text-transform: lowercase; outline: none; }
-        input:focus { border-color: #e67e22; }
-        button { background: #e67e22; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; width: 100%; transition: 0.3s; }
-        button:hover { background: #d35400; transform: scale(1.02); }
-        #result { margin-top: 25px; min-height: 80px; transition: all 0.5s ease; }
-        .side-dish-text { font-size: 1.8rem; font-weight: bold; display: block; margin-top: 10px; }
+        /* Menggunakan warna dari poster: Merah Tua (#800000) dan Cream (#FDF1DA) */
+        body { 
+            font-family: 'Montserrat', 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #710000; /* Latar Belakang Merah Tua Gelap seperti poster */
+            margin: 0; 
+            color: #FDF1DA; /* Teks Utama Cream */
+        }
+        
+        .container { 
+            background: rgba(0,0,0,0.4); /* Kotak transparan agar merah tua tetap terlihat */
+            padding: 3rem 2.5rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            text-align: center; 
+            width: 360px; 
+            border: 3px solid #FDF1DA; /* Border Cream seperti tulisan "25K" */
+        }
+        
+        h1 { 
+            color: #FDF1DA; /* Warna Cream untuk Judul */
+            font-size: 2.8rem;
+            margin: 0;
+            letter-spacing: -1px;
+            font-weight: 800;
+        }
+
+        .brand-handle {
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            color: rgba(253, 241, 218, 0.7);
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        input { 
+            width: 85%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 2px solid #FDF1DA; 
+            border-radius: 10px; 
+            font-size: 1.4rem; 
+            text-align: center; 
+            background-color: transparent;
+            color: #FDF1DA;
+            text-transform: lowercase; 
+            outline: none; 
+        }
+        
+        input::placeholder {
+            color: rgba(253, 241, 218, 0.4);
+        }
+
+        input:focus { 
+            box-shadow: 0 0 15px rgba(253, 241, 218, 0.5);
+        }
+        
+        button { 
+            background: #FDF1DA; /* Tombol Cream */
+            color: #710000; /* Teks di tombol Merah Tua */
+            border: none; 
+            padding: 15px 30px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            width: 100%; 
+            transition: all 0.3s ease; 
+            letter-spacing: 1px;
+        }
+        
+        button:hover { 
+            transform: scale(1.03); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        #result { 
+            margin-top: 30px; 
+            min-height: 120px; 
+            transition: all 0.5s ease; 
+        }
+
+        /* Styling untuk gambar side dish agar pas di kotak */
+        .side-dish-img {
+            max-width: 150px;
+            margin-top: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .side-dish-text { 
+            font-size: 2rem; 
+            font-weight: bold; 
+            color: #FDF1DA;
+            display: block; 
+            margin-top: 10px; 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>🍔 Blind Bite</h2>
-    <span class="brand">BURGER & SURPRISE</span>
+    <h1>🍔 Blind Bite 🍔</h1>
+    <span class="brand-handle">@blind.bite</span>
     
-    <p>Masukkan 6 digit kuponmu:</p>
-    <input type="text" id="couponInput" placeholder="abc123" maxlength="6">
+    <p>Masukkan 6 digit kuponmu untuk membuka kotak kejutan!</p>
+    <input type="text" id="couponInput" placeholder="xxxxxx" maxlength="6">
     <br>
-    <button onclick="revealSideDish()">CEK HADIAH!</button>
+    <button onclick="revealSideDish()">BUKA KOTAK!</button>
     
     <div id="result"></div>
 </div>
 
 <script>
+    // PENTING: Untuk sementara, aku pakai gambar placeholder.
+    // Nanti kamu bisa potong (crop) gambar dari poster kamu dan upload ke GitHub-mu,
+    // lalu ganti link-nya di bawah.
+    const imagePlaceholder = {
+        fries: 'https://via.placeholder.com/150x120?text=French+Fries',
+        nuggets: 'https://via.placeholder.com/150x120?text=Nuggets',
+        rings: 'https://via.placeholder.com/150x120?text=Onion+Rings'
+    };
+
     function revealSideDish() {
         const input = document.getElementById('couponInput');
         const coupon = input.value.toLowerCase().trim();
@@ -43,7 +148,7 @@
 
         // Validasi input
         if (coupon.length !== 6) {
-            resultDiv.innerHTML = "<span style='color: red;'>⚠️ Masukkan 6 digit kode!</span>";
+            resultDiv.innerHTML = "<span style='color: #FDF1DA; background: #900; padding: 5px; border-radius:5px;'>⚠️ Masukkan 6 digit kode!</span>";
             return;
         }
 
@@ -53,42 +158,39 @@
             const hashInt = parseInt(hash.substring(0, 8), 16);
             const score = hashInt % 100;
 
-            let sideDish = "";
-            let emoji = "";
-            let color = "";
+            let sideDishName = "";
+            let sideDishImg = "";
 
-            // 2. Logika Deterministik
+            // 2. Logika Deterministik (Sesuai probabilitas)
             if (score < 60) {
-                sideDish = "Kentang Goreng";
-                emoji = "🍟";
-                color = "#f1c40f";
+                sideDishName = "French Fries";
+                sideDishImg = imagePlaceholder.fries; // Ganti dengan link gambar aslimu
             } else if (score < 90) {
-                sideDish = "Chicken Nugget";
-                emoji = "🍗";
-                color = "#e67e22";
+                sideDishName = "Nuggets";
+                sideDishImg = imagePlaceholder.nuggets; // Ganti dengan link gambar aslimu
             } else {
-                sideDish = "Onion Rings";
-                emoji = "🧅";
-                color = "#9b59b6";
+                sideDishName = "Onion Rings";
+                sideDishImg = imagePlaceholder.rings; // Ganti dengan link gambar aslimu
             }
 
-            // 3. Tampilan Hasil
+            // 3. Tampilan Hasil (Sedikit delay agar kejutan)
             resultDiv.style.opacity = 0;
             setTimeout(() => {
                 resultDiv.innerHTML = `
-                    <span style="color: #7f8c8d; font-size: 0.9rem;">Kamu mendapatkan:</span><br>
-                    <span class="side-dish-text" style="color: ${color};">${emoji} ${sideDish}</span>
+                    <span style="color: rgba(253, 241, 218, 0.7); font-size: 1rem;">Hore! Kotak terbuka:</span><br>
+                    <img src="${sideDishImg}" alt="${sideDishName}" class="side-dish-img">
+                    <span class="side-dish-text">${sideDishName}</span>
                 `;
                 resultDiv.style.opacity = 1;
 
-                // 4. Efek Confetti
+                // 4. Efek Confetti (Warna Cream & Merah)
                 confetti({
-                    particleCount: 100,
-                    spread: 70,
+                    particleCount: 120,
+                    spread: 80,
                     origin: { y: 0.6 },
-                    colors: [color, '#ffffff', '#e67e22']
+                    colors: ['#FDF1DA', '#710000', '#ffffff']
                 });
-            }, 100);
+            }, 150);
 
         } catch (e) {
             console.error(e);
