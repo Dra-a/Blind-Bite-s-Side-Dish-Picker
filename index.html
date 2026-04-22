@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0; }
-        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 340px; }
         input { width: 80%; padding: 10px; margin: 10px 0; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem; text-align: center; }
         button { background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         button:hover { background: #d35400; }
@@ -32,33 +32,50 @@
     function revealSideDish() {
         const coupon = document.getElementById('couponInput').value.toLowerCase().trim();
         const resultDiv = document.getElementById('result');
-
+    
         if (coupon.length !== 6) {
             resultDiv.innerText = "⚠️ Kode harus 6 digit!";
             resultDiv.style.color = "red";
             return;
         }
-
-        // 1. Hash kode kupon menggunakan SHA256
+    
         const hash = CryptoJS.SHA256(coupon).toString();
-        
-        // 2. Ambil sebagian kecil dari hash dan ubah ke angka (0-99)
         const hashInt = parseInt(hash.substring(0, 8), 16);
         const score = hashInt % 100;
-
-        // 3. Tentukan Side Dish berdasarkan probabilitas
+    
         let sideDish = "";
+        let color = "";
+    
         if (score < 60) {
             sideDish = "🍟 Kentang Goreng";
+            color = "#f1c40f"; // Kuning
         } else if (score < 90) {
             sideDish = "🍗 Chicken Nugget";
+            color = "#e67e22"; // Oranye
         } else {
             sideDish = "🧅 Onion Rings";
+            color = "#9b59b6"; // Ungu (Rare!)
         }
-
-        // Tampilkan hasil
-        resultDiv.style.color = "#2c3e50";
-        resultDiv.innerText = sideDish;
+    
+        // Efek Animasi Muncul
+        resultDiv.style.opacity = 0;
+        resultDiv.innerHTML = `<span style="color: ${color}; font-size: 1.5rem;">Selamat! Kamu dapat:</span><br>${sideDish}`;
+        
+        // Trigger Confetti
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: [color, '#ffffff', '#ff0000']
+        });
+    
+        // Fade in effect
+        let opacity = 0;
+        const fadeIn = setInterval(() => {
+            if (opacity >= 1) clearInterval(fadeIn);
+            resultDiv.style.opacity = opacity;
+            opacity += 0.1;
+        }, 300);
     }
 </script>
 
