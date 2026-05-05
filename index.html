@@ -155,17 +155,20 @@
         try {
             // 1. Hashing
             const hash = CryptoJS.SHA256(coupon).toString();
-            const hashInt = parseInt(hash.substring(0, 8), 16);
-            const score = hashInt % 100;
+            const hexPart = hash.substring(0, 2); 
+            const decimalValue = parseInt(hexPart, 16); // Ini akan menghasilkan angka 0-255
+
+            // Normalisasi ke rentang 0-99
+            const score = Math.floor((decimalValue / 256) * 100);
 
             let sideDishName = "";
             let sideDishImg = "";
 
             // 2. Logika Deterministik (Sesuai probabilitas)
-            if (score < 60) {
+            if (score < 50) {
                 sideDishName = "French Fries";
                 sideDishImg = imagePlaceholder.fries; // Ganti dengan link gambar aslimu
-            } else if (score < 90) {
+            } else if (score < 80) {
                 sideDishName = "Nuggets";
                 sideDishImg = imagePlaceholder.nuggets; // Ganti dengan link gambar aslimu
             } else {
