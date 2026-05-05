@@ -142,62 +142,59 @@
     };
 
     function revealSideDish() {
+        console.log("--- Tombol Diklik! ---"); // Cek apakah fungsi terpanggil
+        
         const input = document.getElementById('couponInput');
         const coupon = input.value.toLowerCase().trim();
         const resultDiv = document.getElementById('result');
-
-        // Validasi input
+    
         if (coupon.length !== 6) {
-            resultDiv.innerHTML = "<span style='color: #FDF1DA; background: #900; padding: 5px; border-radius:5px;'>⚠️ Masukkan 6 digit kode!</span>";
+            console.log("Error: Kupon kurang dari 6 digit");
+            resultDiv.innerHTML = "<span style='color: #FDF1DA;'>Masukkan 6 digit kuponmu<br>untuk membuka blind boxnya!</span>";
             return;
         }
-
+    
         try {
-            // 1. Hashing
             const hash = CryptoJS.SHA256(coupon).toString();
-            const hexPart = hash.substring(0, 2); 
-            const decimalValue = parseInt(hexPart, 16); // Ini akan menghasilkan angka 0-255
-
-            // Normalisasi ke rentang 0-99
-            const score = Math.floor((decimalValue / 256) * 100);
-
+            // Mengambil 4 karakter agar lebih variatif
+            const score = parseInt(hash.substring(0, 4), 16) % 100;
+    
+            // INI YANG HARUS KAMU CEK DI CONSOLE
+            console.log("KUPON MASUK:", coupon);
+            console.log("HASIL SCORE:", score);
+    
             let sideDishName = "";
             let sideDishImg = "";
-
-            // 2. Logika Deterministik (Sesuai probabilitas)
-            if (score < 50) {
+    
+            if (score < 60) {
                 sideDishName = "French Fries";
-                sideDishImg = imagePlaceholder.fries; // Ganti dengan link gambar aslimu
-            } else if (score < 80) {
+                sideDishImg = 'kentang.png'; 
+            } else if (score < 90) {
                 sideDishName = "Nuggets";
-                sideDishImg = imagePlaceholder.nuggets; // Ganti dengan link gambar aslimu
+                sideDishImg = 'nugget.png';
             } else {
                 sideDishName = "Onion Rings";
-                sideDishImg = imagePlaceholder.rings; // Ganti dengan link gambar aslimu
+                sideDishImg = 'onion-rings.png';
             }
-
-            // 3. Tampilan Hasil (Sedikit delay agar kejutan)
+    
+            // Tampilkan hasil
             resultDiv.style.opacity = 0;
             setTimeout(() => {
                 resultDiv.innerHTML = `
-                    <span style="color: rgba(253, 241, 218, 0.7); font-size: 1rem;">Yey! Kamu dapat side dish:</span><br>
-                    <img src="${sideDishImg}" alt="${sideDishName}" class="side-dish-img">
+                    <span style="color: rgba(253, 241, 218, 0.7); font-size: 1rem;">Hore! Kotak terbuka:</span><br>
+                    <img src="${sideDishImg}" class="side-dish-img">
                     <span class="side-dish-text">${sideDishName}</span>
                 `;
                 resultDiv.style.opacity = 1;
-
-                // 4. Efek Confetti (Warna Cream & Merah)
+                
                 confetti({
                     particleCount: 120,
-                    spread: 80,
-                    origin: { y: 0.6 },
-                    colors: ['#FDF1DA', '#710000', '#ffffff']
+                    colors: ['#FDF1DA', '#710000']
                 });
             }, 150);
-
+    
         } catch (e) {
-            console.error(e);
-            resultDiv.innerText = "Terjadi kesalahan sistem.";
+            console.error("CRASH:", e);
         }
     }
 </script>
